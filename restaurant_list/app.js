@@ -43,7 +43,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', (req, res) => {
   Restaurant.find() //資料庫查找資料
     .lean() //把資料轉換成單純的JS物件
-    .then((restaurants) => res.render('index', { restaurants })) //把資料送給前端樣板
+    .then((restaurants) => {
+      res.render('index', { restaurants })
+    }) //把資料送給前端樣板
     .catch((error) => console.log(error)) //錯誤處理
 })
 
@@ -126,14 +128,29 @@ app.post('/restaurants/:id/delete', (req, res) => {
 // querystring => 使用query取得網址?後面的參數
 app.get('/search', (req, res) => {
   const keyword = req.query.keyword
-  const restaurants = restaurantList.results.filter((restaurant) => {
-    return (
-      restaurant.name.toLowerCase().includes(keyword.toLowerCase()) ||
-      restaurant.name_en.toLowerCase().includes(keyword.toLowerCase()) ||
-      restaurant.category.toLowerCase().includes(keyword.toLowerCase())
-    )
+  const searchKeywordRegExp = new RegExp(keyword, 'i')
+  Restaurant.find({
+    $or: [
+      {
+        name: {
+          $regex: searchKeywordRegExp,
+        },
+      },
+      {
+        category: {
+          $regex: searchKeywordRegExp,
+        },
+      },
+    ],
   })
-  res.render('index', { restaurants: restaurants, keyword: keyword })
+    .lean()
+    .exec((err, restaurants) => {
+      if (err) return console.error(err)
+      return res.render('index', {
+        restaurants,
+        keyword,
+      })
+    })
 })
 
 app.listen(port, () => {
