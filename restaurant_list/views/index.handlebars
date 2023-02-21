@@ -73,7 +73,28 @@
                     {{this.rating}}
                     <i class='fas fa-star fa-xs'></i>
                   </span>
-
+                  <div style='text-align: right;'>
+                    <form
+                      action='/restaurants/{{this._id}}/edit?_method=GET'
+                      method='GET'
+                      style='display: inline;'
+                    >
+                      <button
+                        type='submit'
+                        class='btn btn-primary text-align:right'
+                      >修改餐廳</button>
+                    </form>
+                    <form
+                      action='./restaurants/{{this._id}}/delete?_method=DELETE'
+                      method='POST'
+                      style='display: inline;'
+                    >
+                      <button
+                        type='submit'
+                        class='btn btn-primary text-align:right'
+                      >刪除餐廳</button>
+                    </form>
+                  </div>
                 </div>
               </div>
             </a>

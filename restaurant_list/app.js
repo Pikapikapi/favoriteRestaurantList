@@ -115,6 +115,13 @@ app.post('/restaurants/:id/edit', (req, res) => {
     .catch((error) => console.log(error))
 })
 //使用者可以刪除一家餐廳
+app.post('/restaurants/:id/delete', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .then((restaurant) => restaurant.remove())
+    .then(() => res.redirect('/'))
+    .catch((error) => console.log(error))
+})
 
 // querystring => 使用query取得網址?後面的參數
 app.get('/search', (req, res) => {
