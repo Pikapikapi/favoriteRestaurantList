@@ -37,16 +37,24 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 
 // express no need to decide conten type
+//首頁，使用者可以瀏覽所有餐廳
 app.get('/', (req, res) => {
   res.render('index', { restaurants: restaurantList.results })
 })
 
+//使用者可以新增一家餐廳
+
+//使用者瀏覽一家餐廳的詳細資訊
 app.get('/restaurants/:id', (req, res) => {
   const restaurant = restaurantList.results.find(
     (restaurant) => restaurant.id.toString() === req.params.id
   )
   res.render('show', { restaurant: restaurant })
 })
+
+//使用者可以修改一家餐廳的資訊
+
+//使用者可以刪除一家餐廳
 
 // querystring => 使用query取得網址?後面的參數
 app.get('/search', (req, res) => {
