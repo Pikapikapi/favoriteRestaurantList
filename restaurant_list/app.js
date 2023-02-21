@@ -4,7 +4,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
-const restaurantList = require('./restaurant.json')
+const bodyParser = require('body-parser')
+const Restaurant = require('./models/restaurants')
 const port = 3000
 
 //using dotenv while run dev
@@ -35,14 +36,40 @@ app.set('view engine', 'handlebars')
 
 //setting static files
 app.use(express.static('public'))
-
+//add body parser
+app.use(bodyParser.urlencoded({ extended: true }))
 // express no need to decide conten type
 //首頁，使用者可以瀏覽所有餐廳
 app.get('/', (req, res) => {
-  res.render('index', { restaurants: restaurantList.results })
+  Restaurant.find() //資料庫查找資料
+    .lean() //把資料轉換成單純的JS物件
+    .then((restaurants) => res.render('index', { restaurants })) //把資料送給前端樣板
+    .catch((error) => console.log(error)) //錯誤處理
 })
 
-//使用者可以新增一家餐廳
+//進入新增頁面
+app.get('/new', (req, res) => {
+  return res.render('new')
+})
+//新增餐廳
+app.post('/new/restaurant', (req, res) => {
+  const restaurant = Restaurant({
+    name: req.body.name,
+    name_en: req.body.name_en,
+    category: req.body.category,
+    image: req.body.image,
+    location: req.body.location,
+    phone: req.body.phone,
+    google_map: req.body.google_map,
+    rating: req.body.rating,
+    description: req.body.description,
+  })
+
+  restaurant.save((err) => {
+    if (err) return console.error(err)
+    return res.redirect('/')
+  })
+})
 
 //使用者瀏覽一家餐廳的詳細資訊
 app.get('/restaurants/:id', (req, res) => {
