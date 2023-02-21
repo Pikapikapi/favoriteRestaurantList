@@ -80,8 +80,40 @@ app.get('/restaurants/:id', (req, res) => {
     .catch((error) => console.log(error))
 })
 
-//使用者可以修改一家餐廳的資訊
+//使用者進入修改畫面
+app.get('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .lean()
+    .then((restaurant) => res.render('edit', { restaurant }))
+    .catch((error) => console.log(error))
+})
 
+//使用者可以修改一家餐廳的資訊
+app.post('/restaurants/:id/edit', (req, res) => {
+  const id = req.params.id
+  const newRestaurant = Restaurant({
+    name: req.body.name,
+    name_en: req.body.name_en,
+    category: req.body.category,
+    image: req.body.image,
+    location: req.body.location,
+    phone: req.body.phone,
+    google_map: req.body.google_map,
+    rating: req.body.rating,
+    description: req.body.description,
+  })
+  //1.查詢資料
+  //2.如果查詢到資料，修改後重新儲存資料
+  //3.儲存成功後，導向餐廳頁面
+  return Restaurant.findById(id)
+    .then((restaurant) => {
+      Object.assign(restaurant, req.body)
+      return restaurant.save()
+    })
+    .then(() => res.redirect(`/restaurants/${id}`))
+    .catch((error) => console.log(error))
+})
 //使用者可以刪除一家餐廳
 
 // querystring => 使用query取得網址?後面的參數
