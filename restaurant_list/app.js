@@ -73,10 +73,11 @@ app.post('/new/restaurant', (req, res) => {
 
 //使用者瀏覽一家餐廳的詳細資訊
 app.get('/restaurants/:id', (req, res) => {
-  const restaurant = restaurantList.results.find(
-    (restaurant) => restaurant.id.toString() === req.params.id
-  )
-  res.render('show', { restaurant: restaurant })
+  const id = req.params.id
+  return Restaurant.findById(id)
+    .lean()
+    .then((restaurant) => res.render('show', { restaurant }))
+    .catch((error) => console.log(error))
 })
 
 //使用者可以修改一家餐廳的資訊
