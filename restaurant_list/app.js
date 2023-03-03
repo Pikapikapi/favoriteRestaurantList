@@ -2,7 +2,6 @@
 //會自動先去node_modules的路徑下搜尋
 //如果有給定路徑，則是在指定目錄下搜尋(e.g. 使用./則是在該檔案app.js的同一層路徑下尋找名為movieList.json的檔案)
 const express = require('express')
-const mongoose = require('mongoose')
 const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurants')
@@ -12,22 +11,9 @@ const port = 3000
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
-
-const app = express()
 //connect to mongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-const db = mongoose.connection
-
-db.on('error', () => {
-  console.log('mongoDB error!')
-})
-
-db.once('open', () => {
-  console.log('mongoDB connect')
-})
+require('./config/mongoose')
+const app = express()
 
 // express template engine
 // handlebars 使用的模板與使用HTML相似，就不用像下面寫一整串難維護難看的排版了
