@@ -45,7 +45,7 @@ router.get('/:id/edit', (req, res) => {
 })
 
 //使用者可以修改一家餐廳的資訊
-router.post('/:id/edit', (req, res) => {
+router.put('/:id/edit', (req, res) => {
   const id = req.params.id
   const newRestaurant = Restaurant({
     name: req.body.name,
@@ -70,45 +70,12 @@ router.post('/:id/edit', (req, res) => {
     .catch((error) => console.log(error))
 })
 //使用者可以刪除一家餐廳
-router.post('/:id/delete', (req, res) => {
+router.delete('/:id/delete', (req, res) => {
   const id = req.params.id
   return Restaurant.findById(id)
     .then((restaurant) => restaurant.remove())
     .then(() => res.redirect('/'))
     .catch((error) => console.log(error))
-})
-
-// querystring => 使用query取得網址?後面的參數
-router.get('/search', (req, res) => {
-  const keyword = req.query.keyword
-  const searchKeywordRegExp = new RegExp(keyword, 'i')
-  Restaurant.find({
-    $or: [
-      {
-        name: {
-          $regex: searchKeywordRegExp,
-        },
-      },
-      {
-        name_en: {
-          $regex: searchKeywordRegExp,
-        },
-      },
-      {
-        category: {
-          $regex: searchKeywordRegExp,
-        },
-      },
-    ],
-  })
-    .lean()
-    .exec((err, restaurants) => {
-      if (err) return console.error(err)
-      return res.render('index', {
-        restaurants,
-        keyword,
-      })
-    })
 })
 
 module.exports = router

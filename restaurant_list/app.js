@@ -6,6 +6,7 @@ const exphbs = require('express-handlebars')
 const bodyParser = require('body-parser')
 const Restaurant = require('./models/restaurants')
 const routes = require('./routes')
+const methodOverrid = require('method-override')
 const port = 3000
 
 //using dotenv while run dev
@@ -23,7 +24,7 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 //add body parser
 app.use(bodyParser.urlencoded({ extended: true }))
-// express no need to decide conten type
+app.use(methodOverrid('_method'))
 app.use(routes)
 app.listen(port, () => {
   console.log(`Express is listening on localhost:${port}`)
