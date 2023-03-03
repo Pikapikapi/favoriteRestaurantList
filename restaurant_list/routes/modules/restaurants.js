@@ -90,6 +90,11 @@ router.get('/search', (req, res) => {
         },
       },
       {
+        name_en: {
+          $regex: searchKeywordRegExp,
+        },
+      },
+      {
         category: {
           $regex: searchKeywordRegExp,
         },
