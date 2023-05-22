@@ -52,4 +52,11 @@ router.post('/register', (req, res) => {
 })
 //register block end
 
+//logout block
+router.get('/logout', (req, res) => {
+  //清除session
+  req.logout()
+  res.redirect('/user/login')
+})
+//logout block end
 module.exports = router
