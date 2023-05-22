@@ -40,7 +40,7 @@ router.post('/register', (req, res) => {
       } else {
         // 如果還沒註冊：寫入資料庫
         return User.create({
-          name,
+          name: name || 'user',
           email,
           password,
         })
