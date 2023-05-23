@@ -9,7 +9,6 @@ const routes = require('./routes')
 const usePassport = require('./config/passport')
 const methodOverrid = require('method-override')
 const flash = require('connect-flash')
-const port = 3000
 
 //using dotenv while run dev
 if (process.env.NODE_ENV !== 'production') {
@@ -26,7 +25,7 @@ app.set('view engine', 'handlebars')
 app.use(express.static('public'))
 app.use(
   session({
-    secret: 'ThisIsMySecret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
   })
@@ -44,6 +43,6 @@ app.use((req, res, next) => {
   next()
 })
 app.use(routes)
-app.listen(port, () => {
-  console.log(`Express is listening on localhost:${port}`)
+app.listen(process.env.PORT, () => {
+  console.log(`Express is listening on localhost:${process.env.PORT}`)
 })
