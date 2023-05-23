@@ -1,10 +1,14 @@
-const Restaurant = require('../restaurants')
-const restaurantsList = require('../../restaurant.json').results
 if (process.env.NODE_ENV !== 'production') {
   // require('dotenv').config()
   require('dotenv').config({ path: __dirname + '/../../.env' })
 }
+
+const Restaurant = require('../restaurants')
+const User = require('../user')
+const restaurantsList = require('../../restaurant.json').results
 const db = require('../../config/mongoose')
+const bcrypt = require('bcryptjs')
+
 db.on('error', () => {
   console.log('mongodb error!')
 })
@@ -38,14 +42,25 @@ db.once('open', () => {
       )
       .then((user) => {
         const userId = user._id
-        return Promise.all(
-          Array.from({ length: 10 }, (_, i) =>
-            Todo.create({ name: `name-${i}`, userId })
-          )
-        )
+        const restaurant = []
+
+        console.log(seedUser.restaurantIndex)
+        let start = 0
+        let end = 3
+        if (!seedUser.name.includes('1')) {
+          start = start + 3
+          end = end + 3
+        }
+        for (let i = start; i < end; i++) {
+          console.log(userId)
+          restaurantsList[i].userId = userId
+          restaurant.push(restaurantsList[i])
+        }
+        console.log(restaurant)
+        return Restaurant.create(restaurant)
       })
       .then(() => {
-        console.log('seedUser: ' + seedUser.name + ' done.')
+        console.log('seedUser done.')
         //只有使用seed建立會使用到，所以seeder做好以後要把這個臨時的node.js程序結束
         //實際效果就是node.js的server運行會關閉，如果沒有exit()，將會是正常的運行server
         process.exit()
