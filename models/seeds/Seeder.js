@@ -44,7 +44,6 @@ db.once('open', () => {
         const userId = user._id
         const restaurant = []
 
-        console.log(seedUser.restaurantIndex)
         let start = 0
         let end = 3
         if (!seedUser.name.includes('1')) {
@@ -52,7 +51,6 @@ db.once('open', () => {
           end = end + 3
         }
         for (let i = start; i < end; i++) {
-          console.log(userId)
           restaurantsList[i].userId = userId
           restaurant.push(restaurantsList[i])
         }
