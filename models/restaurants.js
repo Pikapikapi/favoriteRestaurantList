@@ -3,8 +3,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const restaurantSchema = new Schema({
   id: {
-    type: String,
-    required: Number,
+    type: Number,
+    required: true,
   },
   name: {
     type: String, // 資料型別是字串

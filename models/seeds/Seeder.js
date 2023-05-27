@@ -63,6 +63,7 @@ db.once('open', () => {
         //實際效果就是node.js的server運行會關閉，如果沒有exit()，將會是正常的運行server
         process.exit()
       })
+      .catch((err) => console.log(err))
   }
   console.log('使用者與餐廳資料創建完成.')
 })
