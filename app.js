@@ -33,8 +33,9 @@ app.use(
 //add body parser
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverrid('_method'))
+app.use(flash())
 usePassport(app)
-app.use(flash()) // 掛載套件
+// 掛載套件
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.isAuthenticated()
   res.locals.user = req.user

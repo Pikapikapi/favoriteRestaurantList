@@ -9,13 +9,19 @@ router.get('/login', (req, res) => {
   res.render('login')
 })
 
-router.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/users/login',
-  })
-)
+router.post('/login', (req, res, next) => {
+  if (!req.body.email || !req.body.password) {
+    req.flash('warning_msg', 'Need to enter email and password')
+    return res.redirect('/users/login')
+  } else {
+    passport.authenticate('local', {
+      successRedirect: '/',
+      failureRedirect: '/users/login',
+      failureFlash: true,
+    })(req, res, next)
+  }
+})
+
 //login block end
 
 //register block

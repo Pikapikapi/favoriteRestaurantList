@@ -1,14 +1,13 @@
-const { Number } = require('mongoose')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const restaurantSchema = new Schema({
   id: {
     type: Number,
-    required: true,
+    required: false,
   },
   name: {
-    type: String, // 資料型別是字串
-    required: true, // 這是個必填欄位
+    type: String,
+    required: true,
   },
   name_en: {
     type: String,
@@ -20,15 +19,19 @@ const restaurantSchema = new Schema({
   },
   image: {
     type: String,
+    required: false,
   },
   location: {
     type: String,
+    required: false,
   },
   phone: {
     type: String,
+    required: false,
   },
   google_map: {
     type: String,
+    required: false,
   },
   rating: {
     type: Number,
@@ -36,8 +39,10 @@ const restaurantSchema = new Schema({
   },
   description: {
     type: String,
+    required: false,
   },
   userId: {
+    // 加入關聯設定
     type: Schema.Types.ObjectId,
     ref: 'User',
     index: true,
